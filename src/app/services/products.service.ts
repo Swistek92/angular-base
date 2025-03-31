@@ -8,6 +8,7 @@ import { PaginationParams, Products } from '../types';
 })
 export class ProductsService {
   constructor(private apiService: ApiService) {}
+
   getProducts = (url: string, params: PaginationParams): Observable<Products> => {
     return this.apiService.get(url, {
       responseType: 'json',

@@ -7,6 +7,8 @@ import { Paginator, PaginatorModule } from 'primeng/paginator';
 import { EditPopupComponent } from '../components/edit-popup/edit-popup.component';
 import { ButtonModule } from 'primeng/button';
 import { DialogModule } from 'primeng/dialog';
+import { EndpointsService } from '../services/endpoints.service';
+import { ClothesFacadeService } from '../services/clothes-facade.service';
 
 @Component({
   selector: 'app-home',
@@ -22,7 +24,7 @@ import { DialogModule } from 'primeng/dialog';
   styleUrls: ['./home.component.scss'],
 })
 export class HomeComponent {
-  constructor(private productsService: ProductsService) {}
+  constructor(private clothesFacade: ClothesFacadeService) {}
   @ViewChild('paginator') paginator: Paginator | undefined;
   visible: boolean = false;
 
@@ -57,7 +59,6 @@ export class HomeComponent {
   }
 
   toggleAddPopup() {
-    // console.log('Add product');
     this.displayAddPopup = true;
   }
 
@@ -76,12 +77,9 @@ export class HomeComponent {
     this.displayAddPopup = false;
   }
 
-  onProductOutput(product: Product) {
-    // console.log(product, 'Output');
-  }
+  onProductOutput(product: Product) {}
 
   onPageChange(event: any) {
-    // console.log(event, 'event');
     this.fetchProducts(event.page, event.rows);
   }
 
@@ -91,56 +89,43 @@ export class HomeComponent {
 
   resetPaginator() {
     this.paginator?.changePage(0);
-    // console.log(this.paginator, 'paginator');
   }
 
   // helper
   fetchProducts(page: number, perPage: number) {
-    this.productsService
-      .getProducts('http://localhost:3000/clothes', { page, perPage })
-      .subscribe((products: Products) => {
-        this.products = products.items;
-        this.totalRecords = products.total;
-      });
+    this.clothesFacade.fetchProducts(page, perPage).subscribe((products: Products) => {
+      this.products = products.items;
+      this.totalRecords = products.total;
+    });
   }
 
   editProduct(product: Product, id: number) {
-    // console.log(product, id, 'product, id');
-    this.productsService.editProduct(`http://localhost:3000/clothes/${id}`, product).subscribe({
-      next: data => {
-        console.log(data);
+    this.clothesFacade.editProduct(product, id).subscribe({
+      next: () => {
         this.fetchProducts(0, this.rows);
         this.resetPaginator();
       },
-      error: error => {
-        console.log(error);
-      },
+      error: error => console.log(error),
     });
   }
 
   deleteProduct(id: number) {
-    this.productsService.deleteProduct(`http://localhost:3000/clothes/${id}`).subscribe({
-      next: data => {
-        console.log(data);
+    this.clothesFacade.deleteProduct(id).subscribe({
+      next: () => {
         this.fetchProducts(0, this.rows);
         this.resetPaginator();
       },
-      error: error => {
-        console.log(error);
-      },
+      error: error => console.log(error),
     });
   }
 
   addProduct(product: Product) {
-    this.productsService.addProduct(`http://localhost:3000/clothes`, product).subscribe({
-      next: data => {
-        console.log(data);
+    this.clothesFacade.addProduct(product).subscribe({
+      next: () => {
         this.fetchProducts(0, this.rows);
         this.resetPaginator();
       },
-      error: error => {
-        console.log(error);
-      },
+      error: error => console.log(error),
     });
   }
 }

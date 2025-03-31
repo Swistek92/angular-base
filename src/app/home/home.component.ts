@@ -67,6 +67,7 @@ export class HomeComponent {
     }
 
     this.editProduct(product, this.selectedProduct.id);
+    this.fetchProducts(0, this.rows);
     this.displayEditPopup = false;
   }
 
@@ -104,6 +105,7 @@ export class HomeComponent {
   }
 
   editProduct(product: Product, id: number) {
+    console.log(product, id, 'product, id');
     this.productsService.editProduct(`http://localhost:3000/clothes/${id}`, product).subscribe({
       next: data => {
         console.log(data);

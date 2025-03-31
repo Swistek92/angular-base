@@ -25,14 +25,27 @@ export class EditPopupComponent {
   };
   @Output() confirm = new EventEmitter<Product>();
   @Output() displayChange = new EventEmitter<boolean>();
+  selectedProduct: Product = {
+    name: '',
+    image: '',
+    price: '',
+    rating: 0,
+  };
 
+  ngOnChanges(): void {
+    // Tworzymy kopię przy starcie
+    this.selectedProduct = JSON.parse(JSON.stringify(this.product));
+    console.log('ngOnInit', this.product);
+  }
   onConfirm() {
-    this.confirm.emit(this.product);
+    this.confirm.emit(this.selectedProduct);
     this.display = false;
     this.displayChange.emit(false); // zamiast this.display = false
   }
 
   onCancel() {
+    // this.confirm.emit();
+
     this.displayChange.emit(false); // zamiast this.display = false
     this.display = false;
   }

@@ -28,18 +28,6 @@ export class ProductComponent implements OnInit {
     this.edit.emit(this.product);
   }
 
-  confirmDeleteProduct() {
-    this.confirmationService.confirm({
-      target: this.deleteButton.nativeElement,
-      message: 'Are you sure you want to delete this product?',
-      header: 'Confirmation',
-      icon: 'pi pi-exclamation-triangle',
-      accept: () => {
-        this.delete.emit(this.product);
-      },
-    });
-  }
-
   confirmDelete() {
     this.confirmationService.confirm({
       target: this.deleteButton.nativeElement,

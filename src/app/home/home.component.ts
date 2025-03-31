@@ -1,42 +1,39 @@
-import { Component, EventEmitter, Output, ViewChild } from '@angular/core';
-import { ProductsService } from '../services/products.service';
-import { Product, Products } from '../types';
-import { ProductComponent } from '../components/product/product.component';
+import { Component, ViewChild } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { Product, Products, PopupMode } from '../types';
+import { ProductComponent } from '../components/product/product.component';
+import { ProductFormComponent } from '../components/popup/product-form/product-form.component';
 import { Paginator, PaginatorModule } from 'primeng/paginator';
-import { EditPopupComponent } from '../components/edit-popup/edit-popup.component';
+import { PopupWrapperComponent } from '../components/popup/popup-wrapper/popup-wrapper.component';
 import { ButtonModule } from 'primeng/button';
 import { DialogModule } from 'primeng/dialog';
-import { EndpointsService } from '../services/endpoints.service';
-import { ClothesFacadeService } from '../services/clothes-facade.service';
+import { ClothesFacadeService } from '../services/products/clothes-facade.service';
 
 @Component({
   selector: 'app-home',
+  standalone: true,
   imports: [
-    ProductComponent,
     CommonModule,
+    ProductComponent,
+    ProductFormComponent,
     PaginatorModule,
-    EditPopupComponent,
     ButtonModule,
     DialogModule,
+    PopupWrapperComponent,
   ],
   templateUrl: './home.component.html',
   styleUrls: ['./home.component.scss'],
 })
 export class HomeComponent {
   constructor(private clothesFacade: ClothesFacadeService) {}
-  @ViewChild('paginator') paginator: Paginator | undefined;
-  visible: boolean = false;
 
-  showDialog() {
-    this.visible = true;
-  }
+  @ViewChild('paginator') paginator: Paginator | undefined;
+
   products: Product[] = [];
   totalRecords: number = 0;
   rows: number = 5;
 
-  displayEditPopup: boolean = false;
-  displayAddPopup: boolean = false;
+  popupMode: PopupMode = null;
 
   selectedProduct: Product = {
     id: 0,
@@ -45,53 +42,62 @@ export class HomeComponent {
     price: '',
     rating: 0,
   };
-  toggleEditPopup(product: Product) {
-    this.selectedProduct = product;
-    this.displayEditPopup = true;
+
+  get displayPopup(): boolean {
+    return this.popupMode !== null;
   }
 
-  toggleDeletePopup(product: Product) {
-    if (!product.id) {
-      return;
-    }
-
-    this.deleteProduct(product.id);
-  }
-
-  toggleAddPopup() {
-    this.displayAddPopup = true;
-  }
-
-  onConfirmEdit(product: Product) {
-    if (!this.selectedProduct.id) {
-      return;
-    }
-
-    this.editProduct(product, this.selectedProduct.id);
-    this.fetchProducts(0, this.rows);
-    this.displayEditPopup = false;
-  }
-
-  onConfirmAdd(product: Product) {
-    this.addProduct(product);
-    this.displayAddPopup = false;
-  }
-
-  onProductOutput(product: Product) {}
-
-  onPageChange(event: any) {
-    this.fetchProducts(event.page, event.rows);
+  get popupTitle(): string {
+    return this.popupMode === 'edit' ? 'Edit Product' : 'Add Product';
   }
 
   ngOnInit() {
     this.fetchProducts(0, this.rows);
   }
 
+  toggleAddPopup() {
+    this.selectedProduct = {
+      id: 0,
+      name: '',
+      image: '',
+      price: '',
+      rating: 0,
+    };
+    this.popupMode = 'add';
+  }
+
+  toggleEditPopup(product: Product) {
+    this.selectedProduct = product;
+    this.popupMode = 'edit';
+  }
+
+  toggleDeletePopup(product: Product) {
+    if (product.id) {
+      this.deleteProduct(product.id);
+    }
+  }
+
+  onPopupCancel() {
+    this.popupMode = null;
+  }
+
+  onPopupConfirm(product: Product) {
+    if (this.popupMode === 'edit' && this.selectedProduct.id) {
+      this.editProduct(product, this.selectedProduct.id);
+    } else {
+      this.addProduct(product);
+    }
+    this.popupMode = null;
+  }
+
+  onPageChange(event: any) {
+    this.fetchProducts(event.page, event.rows);
+  }
+
   resetPaginator() {
     this.paginator?.changePage(0);
   }
 
-  // helper
   fetchProducts(page: number, perPage: number) {
     this.clothesFacade.fetchProducts(page, perPage).subscribe((products: Products) => {
       this.products = products.items;

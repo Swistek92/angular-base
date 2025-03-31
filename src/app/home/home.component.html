@@ -1,4 +1,5 @@
 <div class="column home-wrapper">
+  <!-- ➕ Dodaj produkt -->
   <button
     type="button"
     pButton
@@ -7,7 +8,8 @@
     label="Add Product"
     class="add-product-btn addbutton"
   ></button>
-  <!-- product -->
+
+  <!-- 🧾 Lista produktów -->
   <div class="row wrap gap-1 space-around product-section">
     <app-product
       *ngFor="let product of products"
@@ -17,7 +19,7 @@
     ></app-product>
   </div>
 
-  <!-- paginator   -->
+  <!-- 📄 Paginator -->
   <p-paginator
     #paginator
     class="paginator"
@@ -27,16 +29,8 @@
     [rowsPerPageOptions]="[5, 10, 20]"
   />
 </div>
-<app-edit-popup
-  [product]="selectedProduct"
-  [(display)]="displayEditPopup"
-  (confirm)="onConfirmEdit($event)"
-  header="Edit Product"
-></app-edit-popup>
 
-<!-- Add Product -->
-<app-edit-popup
-  [(display)]="displayAddPopup"
-  (confirm)="onConfirmAdd($event)"
-  header="Add Product"
-></app-edit-popup>
+<!-- 🪟 Popup (jeden wspólny do add/edit) -->
+<app-popup-wrapper [visible]="displayPopup" [title]="popupTitle" (close)="onPopupCancel()">
+  <app-product-form (submit)="onPopupConfirm($event)" />
+</app-popup-wrapper>

@@ -1,0 +1,23 @@
+<form [formGroup]="form" (ngSubmit)="onSubmit()">
+  <div class="mb-3">
+    <label>Name</label>
+    <input type="text" pInputText formControlName="name" />
+  </div>
+
+  <div class="mb-3">
+    <label>Image</label>
+    <input type="text" pInputText formControlName="image" />
+  </div>
+
+  <div class="mb-3">
+    <label>Price</label>
+    <input type="text" pInputText formControlName="price" />
+  </div>
+
+  <div class="mb-3">
+    <label>Rating</label>
+    <p-rating formControlName="rating" [readonly]="false" iconCancelClass="hidden" />
+  </div>
+
+  <button pButton type="submit" label="{{ mode === 'edit' ? 'Save' : 'Add' }}"></button>
+</form>

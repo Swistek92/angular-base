@@ -20,8 +20,7 @@
       <input type="text" formControlName="image" />
     </div>
 
-    = <p-rating formControlName="rating" [readonly]="false" iconCancelClass="hidden" />
-    =
+    <p-rating formControlName="rating" [readonly]="false" iconCancelClass="hidden" />
   </div>
 
   <ng-template #footer>
@@ -29,7 +28,7 @@
       label="Save"
       severity="secondary"
       (click)="onConfirm()"
-      [class.disabled]="!productForm.valid"
+      [class.disabled]="productForm.valid"
     />
     <p-button label="Cancel" severity="secondary" (click)="onCancel()" />
   </ng-template>

@@ -57,7 +57,7 @@ export class HomeComponent {
   }
 
   toggleAddPopup() {
-    console.log('Add product');
+    // console.log('Add product');
     this.displayAddPopup = true;
   }
 
@@ -81,7 +81,7 @@ export class HomeComponent {
   }
 
   onPageChange(event: any) {
-    console.log(event, 'event');
+    // console.log(event, 'event');
     this.fetchProducts(event.page, event.rows);
   }
 
@@ -91,7 +91,7 @@ export class HomeComponent {
 
   resetPaginator() {
     this.paginator?.changePage(0);
-    console.log(this.paginator, 'paginator');
+    // console.log(this.paginator, 'paginator');
   }
 
   // helper
@@ -105,7 +105,7 @@ export class HomeComponent {
   }
 
   editProduct(product: Product, id: number) {
-    console.log(product, id, 'product, id');
+    // console.log(product, id, 'product, id');
     this.productsService.editProduct(`http://localhost:3000/clothes/${id}`, product).subscribe({
       next: data => {
         console.log(data);

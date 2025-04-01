@@ -32,5 +32,10 @@
 
 <!-- 🪟 Popup (jeden wspólny do add/edit) -->
 <app-popup-wrapper [visible]="displayPopup" [title]="popupTitle" (close)="onPopupCancel()">
-  <app-product-form (submit)="onPopupConfirm($event)" />
+  <app-product-form
+    [mode]="popupMode"
+    [product]="selectedProduct"
+    (submit)="onPopupConfirm($event)"
+    (cancel)="onPopupCancel()"
+  />
 </app-popup-wrapper>

@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Output, OnInit, inject } from '@angular/core';
+import { Component, EventEmitter, Output, OnInit, inject, Input } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { PopupControllerService } from '../../../services/popup/popup-controller.service';
@@ -16,20 +16,36 @@ import { RatingModule } from 'primeng/rating';
 export class ProductFormComponent implements OnInit {
   private fb = inject(FormBuilder);
   private popupController = inject(PopupControllerService<Product>);
+  @Input() product: Product | null = null;
+  @Input() mode: PopupMode = 'add';
 
   @Output() submit = new EventEmitter<Product>();
 
+  @Output() cancel = new EventEmitter<void>();
+
+  onCancel(): void {
+    this.cancel.emit();
+  }
+
   form!: FormGroup;
-  mode: PopupMode = 'add';
+  // mode!: PopupMode;
 
   ngOnInit(): void {
     this.popupController.mode$.subscribe(mode => {
-      this.mode = mode || 'add';
+      this.mode = mode;
     });
 
     this.popupController.data$.subscribe(product => {
       this.buildForm(product);
     });
+  }
+  ngOnChanges(): void {
+    if (this.mode === 'edit') {
+      console.log(this.product);
+      this.buildForm(this.product);
+    } else {
+      this.buildForm(null);
+    }
   }
 
   buildForm(product: Product | null) {

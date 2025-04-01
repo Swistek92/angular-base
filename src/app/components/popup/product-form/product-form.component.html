@@ -19,5 +19,20 @@
     <p-rating formControlName="rating" [readonly]="false" iconCancelClass="hidden" />
   </div>
 
-  <button pButton type="submit" label="{{ mode === 'edit' ? 'Save' : 'Add' }}"></button>
+  <div class="actions">
+    <button
+      pButton
+      type="submit"
+      label="{{ mode === 'edit' ? 'Save' : 'Add' }}"
+      class="mr-2"
+    ></button>
+
+    <button
+      pButton
+      type="button"
+      label="Cancel"
+      class="p-button-secondary"
+      (click)="onCancel()"
+    ></button>
+  </div>
 </form>

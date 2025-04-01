@@ -3,10 +3,15 @@
   <img src="assets/images/oc-logo.svg" alt="Logo image" class="logo" />
 
   <!-- Navigation -->
-  <div class="row gap-1">
+  <div class="row gap-1 items-center">
     <a routerLink="/" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }">Home</a>
     <a routerLink="/about-us" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }"
       >About</a
     >
+
+    <!-- 🌓 Toggle Theme Button -->
+    <button (click)="toggleTheme()" class="theme-toggle">
+      {{ isDarkMode ? '🌙 Dark' : '☀️ Light' }}
+    </button>
   </div>
 </header>

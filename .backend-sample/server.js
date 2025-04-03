@@ -5,6 +5,8 @@ const cors = require("cors");
 const app = express();
 const port = 3000;
 
+
+
 // Cors configuration - Allows requests from localhost:4200
 const corsOptions = {
   origin: "http://localhost:4200",
@@ -150,6 +152,19 @@ app.put("/clothes/:id", (req, res) => {
 
 // ========== MOCK AUTH ==========
 
+const SECRET = "mysecretkey";
+const REFRESH_SECRET = "myrefreshkey";
+const TOKEN_EXPIRATION = "15s"; // krótkie do testów
+const REFRESH_EXPIRATION = "1d";
+
+
+const generateAccessToken = (user) =>
+  jwt.sign({ id: user.id, email: user.email }, SECRET, { expiresIn: TOKEN_EXPIRATION });
+
+const generateRefreshToken = (user) =>
+  jwt.sign({ id: user.id }, REFRESH_SECRET, { expiresIn: REFRESH_EXPIRATION });
+
+
 // Login
 app.post("/login", (req, res) => {
   const { email, password } = req.body;
@@ -162,10 +177,32 @@ app.post("/login", (req, res) => {
 
     if (!user) return res.status(401).json({ message: "Invalid credentials" });
 
-    // Simulujemy token
-    res.status(200).json({ token: "mock-token", user: { id: user.id, email: user.email } });
+    const accessToken = generateAccessToken(user);
+    const refreshToken = generateRefreshToken(user);
+
+    res.status(200).json({
+      accessToken,
+      refreshToken,
+      user: { id: user.id, email: user.email }
+    });
   });
 });
+
+app.post("/refresh", (req, res) => {
+  const { refreshToken } = req.body;
+
+  if (!refreshToken) {
+    return res.status(401).json({ message: "Refresh token missing" });
+  }
+
+  jwt.verify(refreshToken, REFRESH_SECRET, (err, user) => {
+    if (err) return res.status(403).json({ message: "Invalid refresh token" });
+
+    const newAccessToken = jwt.sign({ id: user.id }, SECRET, { expiresIn: TOKEN_EXPIRATION });
+    res.json({ accessToken: newAccessToken });
+  });
+});
+
 
 // Register
 app.post("/register", (req, res) => {
@@ -199,12 +236,26 @@ app.post("/register", (req, res) => {
 app.get("/me", (req, res) => {
   const authHeader = req.headers.authorization;
 
-  if (authHeader !== "Bearer mock-token") {
-    return res.status(401).json({ message: "Unauthorized" });
+  if (!authHeader?.startsWith("Bearer ")) {
+    return res.status(401).json({ message: "Missing token" });
   }
 
-  // W prawdziwym API zwrócilibyśmy dane na podstawie tokena
-  res.json({ id: 1, email: "admin@example.com" });
+  const token = authHeader.split(" ")[1];
+
+  jwt.verify(token, SECRET, (err, decoded) => {
+    if (err) return res.status(403).json({ message: "Invalid or expired token" });
+
+    // Dla testu tylko dane email
+    res.json({ id: decoded.id, email: decoded.email });
+  });
+});
+
+app.post("/logout", (req, res) => {
+  // W wersji produkcyjnej: można dodać refreshToken do blacklisty
+  // lub usunąć go z bazy danych / pamięci
+
+  // Tu tylko odpowiadamy OK, frontend sam czyści localStorage
+  res.status(200).json({ message: "Logged out successfully" });
 });
 
 

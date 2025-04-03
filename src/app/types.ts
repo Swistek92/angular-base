@@ -44,3 +44,29 @@ export interface PaginationParams {
   perPage: number;
 }
 export type PopupMode = 'add' | 'edit' | 'view' | 'custom' | null;
+
+export interface AuthResponse {
+  accessToken: string;
+  refreshToken: string;
+  user: AuthUser;
+}
+
+export interface AuthUser {
+  id: number;
+  email: string;
+  role?: 'admin' | 'user'; // jeśli masz role
+}
+
+export interface RegisterPayload {
+  email: string;
+  password: string;
+}
+
+export interface LoginPayload {
+  email: string;
+  password: string;
+}
+
+export interface RefreshResponse {
+  accessToken: string;
+}

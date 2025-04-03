@@ -8,6 +8,7 @@ import { PopupWrapperComponent } from '../components/popup/popup-wrapper/popup-w
 import { ButtonModule } from 'primeng/button';
 import { DialogModule } from 'primeng/dialog';
 import { ClothesFacadeService } from '../services/products/clothes-facade.service';
+import { HomeService } from '../services/home-service';
 
 @Component({
   selector: 'app-home',
@@ -25,113 +26,47 @@ import { ClothesFacadeService } from '../services/products/clothes-facade.servic
   styleUrls: ['./home.component.scss'],
 })
 export class HomeComponent {
-  constructor(private clothesFacade: ClothesFacadeService) {}
-
-  @ViewChild('paginator') paginator: Paginator | undefined;
-
   products: Product[] = [];
-  totalRecords: number = 0;
-  rows: number = 5;
+  totalRecords = 0;
+  rows = 5;
 
-  popupMode: PopupMode = null;
+  @ViewChild('paginator') paginator?: Paginator;
 
-  selectedProduct: Product = {
-    id: 0,
-    name: '',
-    image: '',
-    price: '',
-    rating: 0,
-  };
-
-  get displayPopup(): boolean {
-    return this.popupMode !== null;
-  }
-
-  get popupTitle(): string {
-    return this.popupMode === 'edit' ? 'Edit Product' : 'Add Product';
-  }
+  constructor(
+    private clothesFacade: ClothesFacadeService,
+    public homeCtrl: HomeService
+  ) {}
 
   ngOnInit() {
     this.fetchProducts(0, this.rows);
-  }
-
-  toggleAddPopup() {
-    this.selectedProduct = {
-      id: 0,
-      name: '',
-      image: '',
-      price: '',
-      rating: 0,
-    };
-    this.popupMode = 'add';
-  }
-
-  toggleEditPopup(product: Product) {
-    this.selectedProduct = product;
-    this.popupMode = 'edit';
-  }
-
-  toggleDeletePopup(product: Product) {
-    if (product.id) {
-      this.deleteProduct(product.id);
-    }
-  }
-
-  onPopupCancel() {
-    this.popupMode = null;
-  }
-
-  onPopupConfirm(product: Product) {
-    if (this.popupMode === 'edit' && this.selectedProduct.id) {
-      this.editProduct(product, this.selectedProduct.id);
-    } else {
-      this.addProduct(product);
-    }
-    this.popupMode = null;
   }
 
   onPageChange(event: any) {
     this.fetchProducts(event.page, event.rows);
   }
 
+  fetchProducts(page: number, perPage: number) {
+    this.clothesFacade.fetchProducts(page, perPage).subscribe(res => {
+      this.products = res.items;
+      this.totalRecords = res.total;
+    });
+  }
+
+  onPopupConfirm(product: Product) {
+    this.homeCtrl.confirmPopup(product, () => {
+      this.fetchProducts(0, this.rows);
+      this.resetPaginator();
+    });
+  }
+
   resetPaginator() {
     this.paginator?.changePage(0);
   }
 
-  fetchProducts(page: number, perPage: number) {
-    this.clothesFacade.fetchProducts(page, perPage).subscribe((products: Products) => {
-      this.products = products.items;
-      this.totalRecords = products.total;
-    });
-  }
-
-  editProduct(product: Product, id: number) {
-    this.clothesFacade.editProduct(product, id).subscribe({
-      next: () => {
-        this.fetchProducts(0, this.rows);
-        this.resetPaginator();
-      },
-      error: error => console.log(error),
-    });
-  }
-
   deleteProduct(id: number) {
-    this.clothesFacade.deleteProduct(id).subscribe({
-      next: () => {
-        this.fetchProducts(0, this.rows);
-        this.resetPaginator();
-      },
-      error: error => console.log(error),
-    });
-  }
-
-  addProduct(product: Product) {
-    this.clothesFacade.addProduct(product).subscribe({
-      next: () => {
-        this.fetchProducts(0, this.rows);
-        this.resetPaginator();
-      },
-      error: error => console.log(error),
+    this.clothesFacade.deleteProduct(id).subscribe(() => {
+      this.fetchProducts(0, this.rows);
+      this.resetPaginator();
     });
   }
 }

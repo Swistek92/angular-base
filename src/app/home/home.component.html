@@ -1,10 +1,10 @@
 <div class="column home-wrapper">
-  <!-- ➕ Dodaj produkt -->
+  <!-- ➕ Dodaj produkt (tylko np. admin) -->
   <button
     type="button"
     pButton
     icon="pi pi-plus"
-    (click)="toggleAddPopup()"
+    (click)="homeCtrl.openAdd()"
     label="Add Product"
     class="add-product-btn addbutton"
   ></button>
@@ -14,8 +14,8 @@
     <app-product
       *ngFor="let product of products"
       [product]="product"
-      (delete)="toggleDeletePopup($event)"
-      (edit)="toggleEditPopup($event)"
+      (delete)="deleteProduct(product.id!)"
+      (edit)="homeCtrl.openEdit(product)"
     ></app-product>
   </div>
 
@@ -27,15 +27,19 @@
     [rows]="rows"
     [totalRecords]="totalRecords"
     [rowsPerPageOptions]="[5, 10, 20]"
-  />
+  ></p-paginator>
 </div>
 
 <!-- 🪟 Popup (jeden wspólny do add/edit) -->
-<app-popup-wrapper [visible]="displayPopup" [title]="popupTitle" (close)="onPopupCancel()">
+<app-popup-wrapper
+  [visible]="homeCtrl.displayPopup"
+  [title]="homeCtrl.popupTitle"
+  (close)="homeCtrl.cancelPopup()"
+>
   <app-product-form
-    [mode]="popupMode"
-    [product]="selectedProduct"
+    [mode]="homeCtrl.popupMode"
+    [product]="homeCtrl.selectedProduct"
     (submit)="onPopupConfirm($event)"
-    (cancel)="onPopupCancel()"
+    (cancel)="homeCtrl.cancelPopup()"
   />
 </app-popup-wrapper>

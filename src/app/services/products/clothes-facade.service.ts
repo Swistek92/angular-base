@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { ProductsService } from './products.service';
-import { EndpointsService } from './endpoints.service';
+import { EndpointsService } from '../endpoints.service';
 import { Product, Products } from '../../types';
 import { Observable } from 'rxjs';
 

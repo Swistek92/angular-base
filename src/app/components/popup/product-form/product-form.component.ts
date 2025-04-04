@@ -1,34 +1,54 @@
 import { Component, EventEmitter, Output, OnInit, inject, Input } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
+import {
+  FormBuilder,
+  FormControl,
+  FormGroup,
+  ReactiveFormsModule,
+  Validators,
+} from '@angular/forms';
 import { PopupControllerService } from '../../../services/popup/popup-controller.service';
 import { PopupMode, Product } from '../../../types';
 import { ButtonModule } from 'primeng/button';
 import { InputTextModule } from 'primeng/inputtext';
 import { RatingModule } from 'primeng/rating';
+import { PopupWrapperComponent } from '../popup-wrapper/popup-wrapper.component';
+
+interface ProductFormControls {
+  name: FormControl;
+  price: FormControl;
+  image: FormControl;
+  rating: FormControl;
+}
 
 @Component({
   selector: 'app-product-form',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule, ButtonModule, InputTextModule, RatingModule],
+  imports: [
+    CommonModule,
+    ReactiveFormsModule,
+    ButtonModule,
+    InputTextModule,
+    RatingModule,
+    PopupWrapperComponent,
+  ],
   templateUrl: './product-form.component.html',
 })
 export class ProductFormComponent implements OnInit {
   private fb = inject(FormBuilder);
   private popupController = inject(PopupControllerService<Product>);
+
   @Input() product: Product | null = null;
   @Input() mode: PopupMode = 'add';
 
-  @Output() submit = new EventEmitter<Product>();
+  @Input() visible: boolean = false;
+  @Output() visibleChange = new EventEmitter<boolean>();
 
+  @Output() submit = new EventEmitter<Product>();
   @Output() cancel = new EventEmitter<void>();
 
-  onCancel(): void {
-    this.cancel.emit();
-  }
-
   form!: FormGroup;
-  // mode!: PopupMode;
+  submitted: boolean = false;
 
   ngOnInit(): void {
     this.popupController.mode$.subscribe(mode => {
@@ -39,9 +59,10 @@ export class ProductFormComponent implements OnInit {
       this.buildForm(product);
     });
   }
+
   ngOnChanges(): void {
+    console.log('ngOnChanges', this.product, this.mode);
     if (this.mode === 'edit') {
-      console.log(this.product);
       this.buildForm(this.product);
     } else {
       this.buildForm(null);
@@ -55,13 +76,31 @@ export class ProductFormComponent implements OnInit {
       price: [product?.price || '', [Validators.required]],
       rating: [product?.rating || 0],
     });
+    this.submitted = false;
   }
 
   onSubmit(): void {
+    this.submitted = true;
+
     if (this.form.valid) {
       this.submit.emit(this.form.value);
+      this.hide();
     } else {
       this.form.markAllAsTouched();
     }
+  }
+
+  onCancel(): void {
+    this.hide();
+    this.cancel.emit();
+  }
+
+  hide(): void {
+    this.visible = false;
+    this.visibleChange.emit(this.visible);
+  }
+
+  get f() {
+    return this.form.controls;
   }
 }

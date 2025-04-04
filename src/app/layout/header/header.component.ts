@@ -1,13 +1,27 @@
-import { Component } from '@angular/core';
+import { Component, inject, ViewChild } from '@angular/core';
 import { RouterModule } from '@angular/router';
-
+import { LoginComponent } from '../../auth/login/login.component';
+import { ButtonModule } from 'primeng/button';
+import { AuthStoreService } from '../../auth/store/auth-store.service';
+import { AsyncPipe, NgIf } from '@angular/common';
 @Component({
   selector: 'app-header',
-  imports: [RouterModule],
+  imports: [RouterModule, ButtonModule, LoginComponent, AsyncPipe, NgIf],
   templateUrl: './header.component.html',
   styleUrl: './header.component.scss',
 })
 export class HeaderComponent {
+  private authStore = inject(AuthStoreService);
+  @ViewChild(LoginComponent) loginModal!: LoginComponent;
+  user$ = this.authStore.user$;
+
+  logout() {
+    this.authStore.logout();
+  }
+
+  openLogin() {
+    this.loginModal.show();
+  }
   isDarkMode = false;
   constructor() {
     const saved = localStorage.getItem('theme');

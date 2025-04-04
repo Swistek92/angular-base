@@ -41,6 +41,21 @@ export class HomeService {
   }
 
   private emptyProduct(): Product {
-    return { id: 0, name: '', image: '', price: '', rating: 0 };
+    return {
+      id: 0,
+      name: '',
+      image: '',
+      price: '',
+      rating: 0,
+      ownerId: 0,
+      ownerName: '',
+      description: '',
+      createdAt: new Date().toISOString(),
+      category: '',
+      available: true,
+      views: 0,
+      tags: [],
+      location: '',
+    };
   }
 }

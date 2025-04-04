@@ -30,16 +30,10 @@
   ></p-paginator>
 </div>
 
-<!-- 🪟 Popup (jeden wspólny do add/edit) -->
-<app-popup-wrapper
-  [visible]="homeCtrl.displayPopup"
-  [title]="homeCtrl.popupTitle"
-  (close)="homeCtrl.cancelPopup()"
->
-  <app-product-form
-    [mode]="homeCtrl.popupMode"
-    [product]="homeCtrl.selectedProduct"
-    (submit)="onPopupConfirm($event)"
-    (cancel)="homeCtrl.cancelPopup()"
-  />
-</app-popup-wrapper>
+<app-product-form
+  [(visible)]="homeCtrl.displayPopup"
+  [product]="homeCtrl.selectedProduct"
+  [mode]="homeCtrl.popupMode"
+  (submit)="onPopupConfirm($event)"
+  (cancel)="homeCtrl.cancelPopup()"
+/>

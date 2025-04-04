@@ -1,38 +1,66 @@
-<form [formGroup]="form" (ngSubmit)="onSubmit()">
-  <div class="mb-3">
-    <label>Name</label>
-    <input type="text" pInputText formControlName="name" />
-  </div>
+<app-popup-wrapper
+  [(visible)]="visible"
+  [title]="mode === 'edit' ? 'Edit Product' : 'Add Product'"
+  (close)="onCancel()"
+>
+  <form [formGroup]="form" (ngSubmit)="onSubmit()">
+    <div class="mb-3">
+      <label>Name</label>
+      <input
+        type="text"
+        pInputText
+        formControlName="name"
+        [ngClass]="{ 'ng-invalid': submitted && f['name'].invalid }"
+      />
+      <div *ngIf="submitted && f['name'].invalid" class="text-red-500 text-sm">
+        Name is required
+      </div>
+    </div>
 
-  <div class="mb-3">
-    <label>Image</label>
-    <input type="text" pInputText formControlName="image" />
-  </div>
+    <div class="mb-3">
+      <label>Image</label>
+      <input
+        type="text"
+        pInputText
+        formControlName="image"
+        [ngClass]="{ 'ng-invalid': submitted && f['image'].invalid }"
+      />
+      <!-- optional validation message -->
+    </div>
 
-  <div class="mb-3">
-    <label>Price</label>
-    <input type="text" pInputText formControlName="price" />
-  </div>
+    <div class="mb-3">
+      <label>Price</label>
+      <input
+        type="text"
+        pInputText
+        formControlName="price"
+        [ngClass]="{ 'ng-invalid': submitted && f['price'].invalid }"
+      />
+      <div *ngIf="submitted && f['price'].invalid" class="text-red-500 text-sm">
+        Price is required
+      </div>
+    </div>
 
-  <div class="mb-3">
-    <label>Rating</label>
-    <p-rating formControlName="rating" [readonly]="false" iconCancelClass="hidden" />
-  </div>
+    <div class="mb-3">
+      <label>Rating</label>
+      <p-rating formControlName="rating" [readonly]="false" iconCancelClass="hidden" />
+    </div>
 
-  <div class="actions">
-    <button
-      pButton
-      type="submit"
-      label="{{ mode === 'edit' ? 'Save' : 'Add' }}"
-      class="mr-2"
-    ></button>
+    <div class="actions flex justify-end gap-2">
+      <button
+        pButton
+        type="submit"
+        [label]="mode === 'edit' ? 'Save' : 'Add'"
+        class="mr-2"
+      ></button>
 
-    <button
-      pButton
-      type="button"
-      label="Cancel"
-      class="p-button-secondary"
-      (click)="onCancel()"
-    ></button>
-  </div>
-</form>
+      <button
+        pButton
+        type="button"
+        label="Cancel"
+        class="p-button-secondary"
+        (click)="onCancel()"
+      ></button>
+    </div>
+  </form>
+</app-popup-wrapper>

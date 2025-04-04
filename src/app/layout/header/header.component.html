@@ -13,5 +13,26 @@
     <button (click)="toggleTheme()" class="theme-toggle">
       {{ isDarkMode ? '🌙 Dark' : '☀️ Light' }}
     </button>
+    <!-- <p-button label="Zaloguj" icon="pi pi-user" (click)="openLogin()" /> -->
+    <app-login />
+    <!-- login -->
+    <div *ngIf="user$ | async as user; else loginButton">
+      <span *ngIf="user$ | async as user; else loginButton"> 👤 {{ user.email }} </span>
+      <p-button
+        label="Wyloguj"
+        icon="pi pi-user"
+        (click)="logout()"
+        class="logout-button"
+      ></p-button>
+    </div>
+
+    <ng-template #loginButton>
+      <div>
+        <p-button label="Zaloguj" icon="pi pi-user" (click)="openLogin()" />
+      </div>
+    </ng-template>
+
+    <!-- <span *ngIf="user$ | async as user"> Zalogowany jako: {{ user.email }} </span> -->
+    <!-- Display user name if logged in -->
   </div>
 </header>

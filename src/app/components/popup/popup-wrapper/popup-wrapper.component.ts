@@ -12,8 +12,11 @@ export class PopupWrapperComponent {
   @Input() visible: boolean = false;
   @Input() title: string = '';
   @Output() close = new EventEmitter<void>();
+  @Output() visibleChange = new EventEmitter<boolean>();
 
   onClose() {
+    this.visible = false;
+    this.visibleChange.emit(this.visible);
     this.close.emit();
   }
 }

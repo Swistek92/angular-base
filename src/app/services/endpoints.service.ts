@@ -17,22 +17,22 @@ export class EndpointsService {
 
   // 🔐 AUTH
   login(): string {
-    return `${this.BASE_URL}/login`;
+    return `${this.BASE_URL}/auth/login`;
   }
 
   register(): string {
-    return `${this.BASE_URL}/register`;
+    return `${this.BASE_URL}/auth/register`;
   }
 
   refresh(): string {
-    return `${this.BASE_URL}/refresh`;
+    return `${this.BASE_URL}/auth/refresh`;
   }
 
   me(): string {
-    return `${this.BASE_URL}/me`;
+    return `${this.BASE_URL}/auth/me`;
   }
 
   logout(): string {
-    return `${this.BASE_URL}/logout`;
+    return `${this.BASE_URL}/auth/logout`;
   }
 }

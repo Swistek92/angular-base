@@ -10,14 +10,25 @@ import {
   RegisterPayload,
 } from '../../types';
 import { AuthStoreService } from '../store/auth-store.service';
+import { TokenVerifyService } from './token-verify.service';
 
 @Injectable({ providedIn: 'root' })
 export class AuthService {
   constructor(
     private http: HttpClient,
     private endpoints: EndpointsService,
-    private authStore: AuthStoreService
+    private authStore: AuthStoreService,
+    private tokenVerify: TokenVerifyService
   ) {}
+
+  async checkTokenValidity(token: string) {
+    const payload = await this.tokenVerify.verifyToken(token);
+    if (payload) {
+      console.log('✅ Token OK:', payload);
+    } else {
+      console.log('❌ Token niepoprawny lub wygasł');
+    }
+  }
 
   // ✅ Automatyczne logowanie przy starcie appki
   autoLogin(): void {

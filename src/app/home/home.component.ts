@@ -20,7 +20,6 @@ import { HomeService } from '../services/home-service';
     PaginatorModule,
     ButtonModule,
     DialogModule,
-    PopupWrapperComponent,
   ],
   templateUrl: './home.component.html',
   styleUrls: ['./home.component.scss'],

@@ -65,8 +65,8 @@ export class LoginComponent {
     this.authFacade.login(this.form.value).subscribe({
       next: res => {
         this.authFacade.setTokens(res.accessToken, res.refreshToken);
-        this.authFacade.autoLogin();
-        this.hide();
+        this.authFacade.setUser(res.user); // 👈 zapisujemy usera od razu!        this.hide();
+        this.visible = false;
       },
       error: () => {
         alert('Błędny login lub hasło');

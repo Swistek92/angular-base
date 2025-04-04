@@ -32,7 +32,10 @@ export class AuthService {
     if (!token) return;
 
     this.me().subscribe({
-      next: user => this.authStore.setUser(user),
+      next: user => {
+        this.setUser(user); // ✅ używamy metody setUser
+        console.log('🔓 Zalogowany użytkownik:', user);
+      },
       error: () => this.logout(),
     });
   }
@@ -60,17 +63,21 @@ export class AuthService {
       error: () => this.clearSession(),
     });
   }
+
+  // ✅ Set user directly into the store
+  setUser(user: AuthUser): void {
+    this.authStore.setUser(user);
+  }
+
   // ADMIN
-  // ✅ PATCH – aktualizacja użytkownika
   updateUser(id: number, data: UpdateUserPayload): Observable<AuthUser> {
     return this.api.put<AuthUser>(this.endpoints.updateUser(id), data, {});
   }
-  // ADMIN
-  // ❌ DELETE – usunięcie użytkownika
+
   deleteUser(id: number): Observable<{ message: string }> {
     return this.api.delete<{ message: string }>(this.endpoints.deleteUser(id), {});
   }
-  // ADMIN
+
   getAllUsers(): Observable<AuthUser[]> {
     return this.api.get<AuthUser[]>(this.endpoints.getAllUsers(), {});
   }

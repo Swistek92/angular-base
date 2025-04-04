@@ -80,6 +80,7 @@ export interface AuthUser {
 export interface RegisterPayload {
   email: string;
   password: string;
+  role: UserRole;
 }
 
 export interface LoginPayload {

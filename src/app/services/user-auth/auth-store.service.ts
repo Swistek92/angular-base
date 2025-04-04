@@ -12,10 +12,6 @@ export class AuthStoreService {
 
   constructor() {}
 
-  isLoggedIn$: Observable<boolean> = this.user$.pipe(map(user => !!user));
-
-  isAdmin$: Observable<boolean> = this.user$.pipe(map(user => user?.role === 'admin'));
-
   logout(): void {
     this.clearUser();
     localStorage.removeItem('accessToken');

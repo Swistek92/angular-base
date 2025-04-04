@@ -41,6 +41,11 @@ export class AuthFacadeService {
     this.authService.autoLogin();
   }
 
+  // ✅ Set user in store
+  setUser(user: AuthUser): void {
+    this.authService.setUser(user);
+  }
+
   // 📦 Token helpers
   setTokens(access: string, refresh: string): void {
     this.authService.setTokens(access, refresh);

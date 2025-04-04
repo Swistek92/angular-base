@@ -24,7 +24,7 @@ router.post('/login', (req, res) => {
     res.status(200).json({
       accessToken,
       refreshToken,
-      user: { id: user.id, email: user.email }
+      user
     });
   });
 });
@@ -47,11 +47,22 @@ router.get('/me', (req, res) => {
 
   try {
     const decoded = verifyAccessToken(token);
-    res.json({ id: decoded.id, email: decoded.email });
+
+    fs.readFile('./db/users.json', 'utf8', (err, data) => {
+      if (err) return res.status(500).send('Error reading user data');
+
+      const users = JSON.parse(data).users;
+      const user = users.find(u => u.id === decoded.id);
+
+      if (!user) return res.status(404).json({ message: 'User not found' });
+
+      res.status(200).json(user); // ✅ cały user, łącznie z role, name itd.
+    });
   } catch (e) {
     res.status(403).json({ message: 'Invalid token' });
   }
 });
+
 
 
 router.get('/users', (req, res) => {

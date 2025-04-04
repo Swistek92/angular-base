@@ -15,6 +15,7 @@ export class AuthAccessService {
   }
 
   isAdmin(): boolean {
+    console.log('isAdmin', this.user);
     return this.user?.role === 'admin';
   }
 

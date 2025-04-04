@@ -24,6 +24,12 @@
         (click)="logout()"
         class="logout-button"
       ></p-button>
+      <a
+        routerLink="/dashboard"
+        routerLinkActive="active"
+        [routerLinkActiveOptions]="{ exact: true }"
+        >About</a
+      >
     </div>
 
     <ng-template #loginButton>

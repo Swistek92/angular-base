@@ -7,7 +7,7 @@ import {
   OnInit,
   inject,
 } from '@angular/core';
-import { AuthStoreService } from '../store/auth-store.service';
+import { AuthStoreService } from '../../services/user-auth/auth-store.service';
 import { Subscription } from 'rxjs';
 
 @Directive({

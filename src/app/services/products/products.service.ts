@@ -1,33 +1,40 @@
 import { Injectable } from '@angular/core';
-import { ApiService } from './api.service';
 import { Observable } from 'rxjs';
-import { PaginationParams, Products } from '../../types';
+import { ApiService } from '../api.service';
+import { PaginationParams, Product, Products } from '../../types';
+import { EndpointsService } from '../endpoints.service';
 
 @Injectable({
   providedIn: 'root',
 })
 export class ProductsService {
-  constructor(private apiService: ApiService) {}
+  constructor(
+    private apiService: ApiService,
+    private endpoints: EndpointsService
+  ) {}
 
-  getProducts = (url: string, params: PaginationParams): Observable<Products> => {
-    return this.apiService.get(url, {
+  getProducts(params: PaginationParams): Observable<Products> {
+    return this.apiService.get<Products>(this.endpoints.getClothes(), {
       responseType: 'json',
       params,
     });
-  };
+  }
 
-  // Adding a product via the API
-  addProduct = (url: string, body: any): Observable<any> => {
-    return this.apiService.post(url, body, {});
-  };
+  getProductById(id: number): Observable<Product> {
+    return this.apiService.get<Product>(this.endpoints.getClothesById(id), {
+      responseType: 'json',
+    });
+  }
 
-  // Editing a product via the API
-  editProduct = (url: string, body: any): Observable<any> => {
-    return this.apiService.put(url, body, {});
-  };
+  addProduct(product: Product): Observable<Product> {
+    return this.apiService.post<Product>(this.endpoints.createClothes(), product, {});
+  }
 
-  // Deleting a product via the API
-  deleteProduct = (url: string): Observable<any> => {
-    return this.apiService.delete(url, {});
-  };
+  editProduct(product: Product, id: number): Observable<Product> {
+    return this.apiService.put<Product>(this.endpoints.updateClothes(id), product, {});
+  }
+
+  deleteProduct(id: number): Observable<void> {
+    return this.apiService.delete<void>(this.endpoints.deleteClothes(id), {});
+  }
 }

@@ -1,8 +1,8 @@
 import { Component, inject, ViewChild } from '@angular/core';
 import { RouterModule } from '@angular/router';
-import { LoginComponent } from '../../auth/login/login.component';
+import { LoginComponent } from '../../components/popup/login/login.component';
 import { ButtonModule } from 'primeng/button';
-import { AuthStoreService } from '../../auth/store/auth-store.service';
+import { AuthStoreService } from '../../services/user-auth/auth-store.service';
 import { AsyncPipe, NgIf } from '@angular/common';
 @Component({
   selector: 'app-header',

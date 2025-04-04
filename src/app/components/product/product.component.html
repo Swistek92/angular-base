@@ -1,5 +1,6 @@
 <div class="column gap-1 wrapper">
-  <img [src]="product.image" alt="prod image" />
+  <img [src]="product.image" alt="prod image" (click)="goToDetails()" class="clickable" />
+
   <h2 class="title">{{ product.name | truncateName: 10 : '..' }}</h2>
   <div class="row gap-05">
     <span class="price-label">Price:</span>

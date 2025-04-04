@@ -7,7 +7,7 @@ import { Paginator, PaginatorModule } from 'primeng/paginator';
 import { PopupWrapperComponent } from '../components/popup/popup-wrapper/popup-wrapper.component';
 import { ButtonModule } from 'primeng/button';
 import { DialogModule } from 'primeng/dialog';
-import { ClothesFacadeService } from '../services/products/clothes-facade.service';
+import { ClothesFacadeService } from '../services/products/products-facade.service';
 import { HomeService } from '../services/home-service';
 
 @Component({

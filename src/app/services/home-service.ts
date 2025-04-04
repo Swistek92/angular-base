@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { PopupMode, Product } from '../types';
-import { ClothesFacadeService } from './products/clothes-facade.service';
+import { ClothesFacadeService } from './products/products-facade.service';
 
 @Injectable({ providedIn: 'root' })
 export class HomeService {

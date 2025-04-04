@@ -10,8 +10,8 @@ import {
 import { ButtonModule } from 'primeng/button';
 import { DialogModule } from 'primeng/dialog';
 import { InputTextModule } from 'primeng/inputtext';
-import { AuthService } from '../services/auth.service';
-import { PopupWrapperComponent } from '../../components/popup/popup-wrapper/popup-wrapper.component';
+import { PopupWrapperComponent } from '../popup-wrapper/popup-wrapper.component';
+import { AuthFacadeService } from '../../../services/user-auth/auth-facade.service'; // Zmieniono na fasadę
 
 @Component({
   selector: 'app-login',
@@ -35,7 +35,7 @@ export class LoginComponent {
   form!: FormGroup;
 
   private fb = inject(FormBuilder);
-  private auth = inject(AuthService);
+  private authFacade = inject(AuthFacadeService); // ✅ użycie fasady
 
   ngOnInit(): void {
     this.form = this.fb.group({
@@ -62,11 +62,10 @@ export class LoginComponent {
       return;
     }
 
-    this.auth.login(this.form.value).subscribe({
+    this.authFacade.login(this.form.value).subscribe({
       next: res => {
-        console.log(res);
-        this.auth.setTokens(res.accessToken, res.refreshToken);
-        this.auth.autoLogin();
+        this.authFacade.setTokens(res.accessToken, res.refreshToken);
+        this.authFacade.autoLogin();
         this.hide();
       },
       error: () => {

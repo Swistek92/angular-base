@@ -8,6 +8,8 @@ import { ConfirmationService } from 'primeng/api';
 import { ConfirmPopupModule } from 'primeng/confirmpopup';
 import { PricePipe } from '../../pipes/price.pipe';
 import { TruncateNamePipe } from '../../pipes/truncate-name.pipe';
+import { Router, RouterModule } from '@angular/router';
+import { LoadingComponent } from '../spinner/spinner.component';
 
 @Component({
   selector: 'app-product',
@@ -20,19 +22,27 @@ import { TruncateNamePipe } from '../../pipes/truncate-name.pipe';
     ConfirmPopupModule,
     PricePipe,
     TruncateNamePipe,
+    RouterModule,
   ],
   templateUrl: './product.component.html',
   styleUrls: ['./product.component.scss'],
   providers: [ConfirmationService],
 })
 export class ProductComponent implements OnInit {
-  constructor(private confirmationService: ConfirmationService) {}
+  constructor(
+    private confirmationService: ConfirmationService,
+    private router: Router
+  ) {}
 
   @ViewChild('deleteButton') deleteButton: any;
   @Input() product!: Product;
 
   @Output() edit: EventEmitter<Product> = new EventEmitter<Product>();
   @Output() delete: EventEmitter<Product> = new EventEmitter<Product>();
+
+  goToDetails(): void {
+    this.router.navigate(['/product', this.product.id]);
+  }
 
   editProduct() {
     this.edit.emit(this.product);

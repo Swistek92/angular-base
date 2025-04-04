@@ -53,6 +53,67 @@ router.get('/me', (req, res) => {
   }
 });
 
+
+router.get('/users', (req, res) => {
+  fs.readFile('./db/users.json', 'utf8', (err, data) => {
+    if (err) return res.status(500).send('Error reading user data');
+
+    const jsonData = JSON.parse(data);
+    res.status(200).json(jsonData.users); // Zwraca listę użytkowników
+  });
+});
+
+// PATCH – aktywuj/dezaktywuj użytkownika
+
+
+router.patch('/users/:id', (req, res) => {
+  const id = parseInt(req.params.id);
+  const updatedFields = req.body;
+
+  fs.readFile('./db/users.json', 'utf8', (err, data) => {
+    if (err) return res.status(500).send('Error reading user data');
+
+    const jsonData = JSON.parse(data);
+    const index = jsonData.users.findIndex(user => user.id === id);
+
+    if (index === -1) return res.status(404).json({ message: 'User not found' });
+
+    // Nadpisujemy tylko przekazane pola
+    jsonData.users[index] = {
+      ...jsonData.users[index],
+      ...updatedFields,
+    };
+
+    fs.writeFile('./db/users.json', JSON.stringify(jsonData, null, 2), err => {
+      if (err) return res.status(500).send('Error saving data');
+      res.status(200).json(jsonData.users[index]);
+    });
+  });
+});
+// DELETE – usuń użytkownika
+router.delete('/users/:id', (req, res) => {
+  const id = parseInt(req.params.id);
+
+  fs.readFile('./db/users.json', 'utf8', (err, data) => {
+    if (err) return res.status(500).send('Error reading user data');
+
+    const jsonData = JSON.parse(data);
+    const index = jsonData.users.findIndex(user => user.id === id);
+
+    if (index === -1) return res.status(404).json({ message: 'User not found' });
+
+    const deletedUser = jsonData.users.splice(index, 1)[0];
+
+    fs.writeFile('./db/users.json', JSON.stringify(jsonData, null, 2), err => {
+      if (err) return res.status(500).send('Error saving data');
+      res.status(200).json({ message: 'User deleted', user: deletedUser });
+    });
+  });
+});
+
+
+
+
 router.post('/logout', (req, res) => {
   res.status(200).json({ message: 'Logged out successfully' });
 });

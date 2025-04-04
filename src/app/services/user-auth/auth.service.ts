@@ -1,21 +1,22 @@
-import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
-import { EndpointsService } from '../../services/endpoints.service';
+import { ApiService } from '../../services/api.service';
+import { EndpointsService } from '../endpoints.service';
 import {
   AuthResponse,
   AuthUser,
   LoginPayload,
   RefreshResponse,
   RegisterPayload,
+  UpdateUserPayload,
 } from '../../types';
-import { AuthStoreService } from '../store/auth-store.service';
+import { AuthStoreService } from './auth-store.service';
 import { TokenVerifyService } from './token-verify.service';
 
 @Injectable({ providedIn: 'root' })
 export class AuthService {
   constructor(
-    private http: HttpClient,
+    private api: ApiService,
     private endpoints: EndpointsService,
     private authStore: AuthStoreService,
     private tokenVerify: TokenVerifyService
@@ -23,54 +24,58 @@ export class AuthService {
 
   async checkTokenValidity(token: string) {
     const payload = await this.tokenVerify.verifyToken(token);
-    if (payload) {
-      console.log('✅ Token OK:', payload);
-    } else {
-      console.log('❌ Token niepoprawny lub wygasł');
-    }
+    console.log(payload ? '✅ Token OK:' : '❌ Token niepoprawny lub wygasł', payload);
   }
 
-  // ✅ Automatyczne logowanie przy starcie appki
   autoLogin(): void {
     const token = this.getAccessToken();
     if (!token) return;
 
     this.me().subscribe({
       next: user => this.authStore.setUser(user),
-      error: () => this.logout(), // Token nieważny? Wyloguj
+      error: () => this.logout(),
     });
   }
 
-  // 🔐 Login
   login(payload: LoginPayload): Observable<AuthResponse> {
-    return this.http.post<AuthResponse>(this.endpoints.login(), payload);
+    return this.api.post<AuthResponse>(this.endpoints.login(), payload, {});
   }
 
-  // 🆕 Rejestracja
   register(payload: RegisterPayload): Observable<{ message: string }> {
-    return this.http.post<{ message: string }>(this.endpoints.register(), payload);
+    return this.api.post<{ message: string }>(this.endpoints.register(), payload, {});
   }
 
-  // 🔄 Odświeżenie tokena
   refreshToken(): Observable<RefreshResponse> {
     const refreshToken = this.getRefreshToken();
-    return this.http.post<RefreshResponse>(this.endpoints.refresh(), { refreshToken });
+    return this.api.post<RefreshResponse>(this.endpoints.refresh(), { refreshToken }, {});
   }
 
-  // 👤 Pobierz aktualnego usera
   me(): Observable<AuthUser> {
-    return this.http.get<AuthUser>(this.endpoints.me());
+    return this.api.get<AuthUser>(this.endpoints.me(), {});
   }
 
-  // 🚪 Wyloguj użytkownika
   logout(): void {
-    this.http.post(this.endpoints.logout(), {}).subscribe({
+    this.api.post(this.endpoints.logout(), {}, {}).subscribe({
       next: () => this.clearSession(),
-      error: () => this.clearSession(), // fallback
+      error: () => this.clearSession(),
     });
   }
+  // ADMIN
+  // ✅ PATCH – aktualizacja użytkownika
+  updateUser(id: number, data: UpdateUserPayload): Observable<AuthUser> {
+    return this.api.put<AuthUser>(this.endpoints.updateUser(id), data, {});
+  }
+  // ADMIN
+  // ❌ DELETE – usunięcie użytkownika
+  deleteUser(id: number): Observable<{ message: string }> {
+    return this.api.delete<{ message: string }>(this.endpoints.deleteUser(id), {});
+  }
+  // ADMIN
+  getAllUsers(): Observable<AuthUser[]> {
+    return this.api.get<AuthUser[]>(this.endpoints.getAllUsers(), {});
+  }
 
-  // 📦 TOKEN HELPERS
+  // Helpers
   setTokens(access: string, refresh: string): void {
     localStorage.setItem('accessToken', access);
     localStorage.setItem('refreshToken', refresh);
@@ -87,10 +92,9 @@ export class AuthService {
   clearSession(): void {
     localStorage.removeItem('accessToken');
     localStorage.removeItem('refreshToken');
-    this.authStore.clearUser(); // 🧼 usuwa usera z BehaviorSubject
+    this.authStore.clearUser();
   }
 
-  // 🔍 Status loginu
   isLoggedIn(): boolean {
     return !!this.getAccessToken();
   }

@@ -1,0 +1,29 @@
+<p-card *ngIf="product as p" [header]="p.name" styleClass="product-card">
+  <div class="row gap-1">
+    <img [src]="p.image" alt="Product image" style="max-width: 300px; border-radius: 10px" />
+
+    <div class="column gap-05">
+      <p><strong>ID:</strong> {{ p.id }}</p>
+      <p><strong>Price:</strong> {{ p.price | currency }}</p>
+      <p><strong>Rating:</strong> {{ p.rating }} / 5 ⭐</p>
+      <p><strong>Owner:</strong> {{ p.ownerName }} (ID: {{ p.ownerId }})</p>
+      <p><strong>Description:</strong> {{ p.description }}</p>
+      <p><strong>Created at:</strong> {{ p.createdAt | date: 'medium' }}</p>
+      <p><strong>Category:</strong> {{ p.category }}</p>
+
+      <p>
+        <strong>Available:</strong>
+        <p-tag [severity]="p.available ? 'success' : 'danger'">
+          {{ p.available ? 'Available' : 'Out of stock' }}
+        </p-tag>
+      </p>
+
+      <p><strong>Views:</strong> 👁️ {{ p.views }}</p>
+      <p><strong>Location:</strong> {{ p.location }}</p>
+    </div>
+  </div>
+
+  <div class="mt-2">
+    <button type="button" pButton label="Back" icon="pi pi-arrow-left" routerLink="/"></button>
+  </div>
+</p-card>

@@ -15,6 +15,18 @@ export class EndpointsService {
     return `${this.BASE_URL}/clothes/${id}`;
   }
 
+  createClothes(): string {
+    return `${this.BASE_URL}/clothes`;
+  }
+
+  updateClothes(id: number): string {
+    return `${this.BASE_URL}/clothes/${id}`;
+  }
+
+  deleteClothes(id: number): string {
+    return `${this.BASE_URL}/clothes/${id}`;
+  }
+
   // 🔐 AUTH
   login(): string {
     return `${this.BASE_URL}/auth/login`;
@@ -34,5 +46,18 @@ export class EndpointsService {
 
   logout(): string {
     return `${this.BASE_URL}/auth/logout`;
+  }
+
+  // ADMIN
+  getAllUsers(): string {
+    return `${this.BASE_URL}/auth/users`;
+  }
+
+  updateUser(id: number): string {
+    return `${this.BASE_URL}/auth/users/${id}`;
+  }
+
+  deleteUser(id: number): string {
+    return `${this.BASE_URL}/auth/users/${id}`;
   }
 }

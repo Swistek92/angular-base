@@ -90,3 +90,13 @@ export interface LoginPayload {
 export interface RefreshResponse {
   accessToken: string;
 }
+
+export interface UpdateUserPayload {
+  email?: string;
+  name?: string;
+  role?: 'admin' | 'user';
+  isActive?: boolean;
+  verified?: boolean;
+  avatar?: string;
+  [key: string]: any; // fallback
+}

@@ -48,7 +48,7 @@ export class EndpointsService {
     return `${this.BASE_URL}/auth/logout`;
   }
 
-  // ADMIN
+  // 👤 ADMIN
   getAllUsers(): string {
     return `${this.BASE_URL}/auth/users`;
   }
@@ -59,5 +59,21 @@ export class EndpointsService {
 
   deleteUser(id: number): string {
     return `${this.BASE_URL}/auth/users/${id}`;
+  }
+
+  // 🧾 BIDS
+  getBids(): string {
+    return `${this.BASE_URL}/bids`;
+  }
+
+  getBidById(id: number): string {
+    return `${this.BASE_URL}/bids/${id}`;
+  }
+  createBid(): string {
+    return `${this.BASE_URL}/bids`;
+  }
+
+  deleteBid(id: number): string {
+    return `${this.BASE_URL}/bids/${id}`;
   }
 }

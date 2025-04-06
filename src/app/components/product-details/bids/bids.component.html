@@ -1,0 +1,35 @@
+<div *ngIf="loading">Loading bids...</div>
+
+<div *ngIf="bids.length > 0">
+  <h3>Latest Bids</h3>
+  <ul class="bids-list">
+    <li *ngFor="let bid of bids">
+      <img [src]="bid.avatar" alt="avatar" width="30" height="30" />
+      <strong>{{ bid.userName }}</strong> — 💰 {{ bid.amount }} zł
+      <small>({{ bid.createdAt | date: 'short' }})</small>
+      <button
+        pButton
+        icon="pi pi-trash"
+        (click)="deleteBid(bid.id)"
+        class="p-button-sm p-button-danger"
+      ></button>
+    </li>
+  </ul>
+</div>
+
+<h4>Place a Bid</h4>
+<div class="row gap-1">
+  <p-inputNumber
+    [(ngModel)]="newBidAmount"
+    mode="decimal"
+    [min]="1"
+    placeholder="Enter your bid"
+  ></p-inputNumber>
+  <button
+    pButton
+    label="Bid"
+    icon="pi pi-check"
+    (click)="placeBid()"
+    [disabled]="!newBidAmount"
+  ></button>
+</div>

@@ -1,0 +1,67 @@
+{
+  "bids": [
+    {
+      "id": 1,
+      "productId": 1,
+      "userId": 2,
+      "userName": "User One",
+      "avatar": "assets/avatars/user1.png",
+      "amount": 125,
+      "createdAt": "2024-04-04T10:30:00Z"
+    },
+    {
+      "id": 2,
+      "productId": 1,
+      "userId": 1,
+      "userName": "Admin",
+      "avatar": "assets/avatars/admin.png",
+      "amount": 130,
+      "createdAt": "2024-04-04T11:00:00Z"
+    },
+    {
+      "id": 3,
+      "productId": 4,
+      "userId": 1,
+      "userName": "admin@example.com",
+      "avatar": "assets/avatars/admin.png",
+      "amount": 1000,
+      "createdAt": "2025-04-06T14:28:26.872Z"
+    },
+    {
+      "id": 4,
+      "productId": 2,
+      "userId": 1,
+      "userName": "admin@example.com",
+      "avatar": "assets/avatars/admin.png",
+      "amount": 10000,
+      "createdAt": "2025-04-06T14:37:43.644Z"
+    },
+    {
+      "id": 5,
+      "productId": 2,
+      "userId": 1,
+      "userName": "admin@example.com",
+      "avatar": "assets/avatars/admin.png",
+      "amount": 189,
+      "createdAt": "2025-04-06T14:37:54.853Z"
+    },
+    {
+      "id": 6,
+      "productId": 2,
+      "userId": 1,
+      "userName": "admin@example.com",
+      "avatar": "assets/avatars/admin.png",
+      "amount": 123,
+      "createdAt": "2025-04-06T14:40:20.074Z"
+    },
+    {
+      "id": 7,
+      "productId": 2,
+      "userId": 1,
+      "userName": "admin@example.com",
+      "avatar": "assets/avatars/admin.png",
+      "amount": 111,
+      "createdAt": "2025-04-06T14:40:25.081Z"
+    }
+  ]
+}

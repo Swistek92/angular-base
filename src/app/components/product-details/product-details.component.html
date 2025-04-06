@@ -6,7 +6,7 @@
       <p><strong>ID:</strong> {{ p.id }}</p>
       <p><strong>Price:</strong> {{ p.price | currency }}</p>
       <p><strong>Rating:</strong> {{ p.rating }} / 5 ⭐</p>
-      <p><strong>Owner:</strong> {{ p.ownerName }} (ID: {{ p.ownerId }})</p>
+      <p><strong>Owner:</strong> {{ p.ownerEmail }} (ID: {{ p.ownerId }})</p>
       <p><strong>Description:</strong> {{ p.description }}</p>
       <p><strong>Created at:</strong> {{ p.createdAt | date: 'medium' }}</p>
       <p><strong>Category:</strong> {{ p.category }}</p>
@@ -27,3 +27,6 @@
     <button type="button" pButton label="Back" icon="pi pi-arrow-left" routerLink="/"></button>
   </div>
 </p-card>
+
+<!-- 💬 Sekcja licytacji -->
+<app-bids *ngIf="product" [productId]="product.id"></app-bids>

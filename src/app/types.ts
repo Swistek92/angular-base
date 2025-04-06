@@ -38,7 +38,8 @@ export interface Product {
   price: string;
   rating: number;
   ownerId: number;
-  ownerName: string;
+  ownerEmail: string;
+  avatar: string;
   description: string;
   createdAt: string;
   category: string;
@@ -80,7 +81,6 @@ export interface AuthUser {
 export interface RegisterPayload {
   email: string;
   password: string;
-  role: UserRole;
 }
 
 export interface LoginPayload {
@@ -100,4 +100,21 @@ export interface UpdateUserPayload {
   verified?: boolean;
   avatar?: string;
   [key: string]: any; // fallback
+}
+export interface Bid {
+  id: number;
+  productId: number;
+  userId: number;
+  userName: string;
+  avatar: string;
+  amount: number;
+  createdAt: string; // ISO date string
+}
+
+export interface CreateBidPayload {
+  productId: number;
+  userId: number;
+  userName: string;
+  avatar: string;
+  amount: number;
 }

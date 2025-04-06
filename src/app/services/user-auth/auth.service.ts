@@ -75,6 +75,7 @@ export class AuthService {
   }
 
   deleteUser(id: number): Observable<{ message: string }> {
+    console.log('Deleting user with ID:', id);
     return this.api.delete<{ message: string }>(this.endpoints.deleteUser(id), {});
   }
 

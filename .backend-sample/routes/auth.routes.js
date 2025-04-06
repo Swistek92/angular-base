@@ -77,7 +77,7 @@ router.get('/users', (req, res) => {
 // PATCH – aktywuj/dezaktywuj użytkownika
 
 
-router.patch('/users/:id', (req, res) => {
+router.put('/users/:id', (req, res) => {
   const id = parseInt(req.params.id);
   const updatedFields = req.body;
 

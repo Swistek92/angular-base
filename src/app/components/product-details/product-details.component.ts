@@ -8,11 +8,20 @@ import { ButtonModule } from 'primeng/button';
 import { ProgressSpinnerModule } from 'primeng/progressspinner';
 import { LoadingComponent } from '../spinner/spinner.component';
 import { TagModule } from 'primeng/tag';
+import { BidsComponent } from './bids/bids.component';
 
 @Component({
   selector: 'app-product-details',
   standalone: true,
-  imports: [CommonModule, TagModule, RouterModule, CardModule, ButtonModule, ProgressSpinnerModule],
+  imports: [
+    CommonModule,
+    TagModule,
+    RouterModule,
+    CardModule,
+    ButtonModule,
+    ProgressSpinnerModule,
+    BidsComponent,
+  ],
   templateUrl: './product-details.component.html',
   styleUrls: ['./product-details.component.scss'],
 })
@@ -31,6 +40,7 @@ export class ProductDetailsComponent implements OnInit {
       this.clothesFacade.getProductById(id).subscribe({
         next: product => {
           this.product = product;
+          console.log('Product loaded:', product);
           this.loading = false;
         },
         error: err => {

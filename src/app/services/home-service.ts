@@ -48,7 +48,7 @@ export class HomeService {
       price: '',
       rating: 0,
       ownerId: 0,
-      ownerName: '',
+      ownerEmail: '',
       description: '',
       createdAt: new Date().toISOString(),
       category: '',
@@ -56,6 +56,7 @@ export class HomeService {
       views: 0,
       tags: [],
       location: '',
+      avatar: '',
     };
   }
 }

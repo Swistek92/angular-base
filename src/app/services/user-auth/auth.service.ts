@@ -106,4 +106,7 @@ export class AuthService {
   isLoggedIn(): boolean {
     return !!this.getAccessToken();
   }
+  getUser(): AuthUser | null {
+    return this.authStore.getUser();
+  }
 }

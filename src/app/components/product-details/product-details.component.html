@@ -4,7 +4,7 @@
 
     <div class="column gap-05">
       <p><strong>ID:</strong> {{ p.id }}</p>
-      <p><strong>Price:</strong> {{ p.price | currency }}</p>
+      <p><strong>Initial price:</strong> {{ p.price | currency }}</p>
       <p><strong>Rating:</strong> {{ p.rating }} / 5 ⭐</p>
       <p><strong>Owner:</strong> {{ p.ownerEmail }} (ID: {{ p.ownerId }})</p>
       <p><strong>Description:</strong> {{ p.description }}</p>
@@ -29,4 +29,5 @@
 </p-card>
 
 <!-- 💬 Sekcja licytacji -->
-<app-bids *ngIf="product" [productId]="product.id"></app-bids>
+<!-- <app-bids *ngIf="product" [productId]="product.id" [productPrice]=product.price></app-bids> -->
+<app-bids *ngIf="product" [productId]="product.id" [productPrice]="+product.price"></app-bids>

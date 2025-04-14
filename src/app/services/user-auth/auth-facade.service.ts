@@ -8,6 +8,7 @@ import {
   RefreshResponse,
   RegisterPayload,
   UpdateUserPayload,
+  UserRole,
 } from '../../types';
 
 @Injectable({
@@ -44,6 +45,10 @@ export class AuthFacadeService {
   // ✅ Set user in store
   setUser(user: AuthUser): void {
     this.authService.setUser(user);
+  }
+
+  getUser(): AuthUser | null {
+    return this.authService.getUser();
   }
 
   // 📦 Token helpers
@@ -91,5 +96,27 @@ export class AuthFacadeService {
   // ❌ ADMIN — delete user
   deleteUser(id: number): Observable<{ message: string }> {
     return this.authService.deleteUser(id);
+  }
+
+  // ✅ User role & status helpers
+
+  isAdmin(): boolean {
+    return this.authService.getUser()?.role === 'admin';
+  }
+
+  isUser(): boolean {
+    return this.authService.getUser()?.role === 'user';
+  }
+
+  isActive(): boolean {
+    return !!this.authService.getUser()?.isActive;
+  }
+
+  hasRole(role: UserRole): boolean {
+    return this.authService.getUser()?.role === role;
+  }
+
+  isOwner(id: number): boolean {
+    return this.authService.getUser()?.id === id;
   }
 }

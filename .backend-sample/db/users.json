@@ -23,7 +23,7 @@
       "password": "secret123",
       "name": "New User",
       "role": "user",
-      "isActive": false,
+      "isActive": true,
       "verified": false,
       "avatar": "assets/avatars/default.png",
       "createdAt": "2024-04-02T08:30:00Z",

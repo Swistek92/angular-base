@@ -2,10 +2,10 @@ import { Component, Input, OnInit, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { BidsFacadeService } from '../../../services/bids/bids-facade.service';
-import { Bid, CreateBidPayload } from '../../../types';
+import { AuthUser, Bid, CreateBidPayload } from '../../../types';
 import { ButtonModule } from 'primeng/button';
 import { InputNumberModule } from 'primeng/inputnumber';
-import { AuthStoreService } from '../../../services/user-auth/auth-store.service';
+import { AuthFacadeService } from '../../../services/user-auth/auth-facade.service';
 
 @Component({
   selector: 'app-bids',
@@ -16,16 +16,25 @@ import { AuthStoreService } from '../../../services/user-auth/auth-store.service
 })
 export class BidsComponent implements OnInit {
   @Input() productId!: number;
+  @Input() productPrice!: number;
 
   bids: Bid[] = [];
   newBidAmount: number | null = null;
   loading = false;
+  maxPrice!: number;
 
   private bidsFacade = inject(BidsFacadeService);
-  private authStore = inject(AuthStoreService);
+  private authFacade = inject(AuthFacadeService);
+  currentUser: AuthUser | null = null;
+
+  get isActiveUser(): boolean {
+    return this.authFacade.isLoggedIn() && this.authFacade.isActive();
+  }
 
   ngOnInit(): void {
-    if (this.productId) {
+    this.currentUser = this.authFacade.getUser();
+    if (this.productId && this.productPrice != null) {
+      this.maxPrice = this.productPrice;
       this.fetchBids();
     }
   }
@@ -35,6 +44,9 @@ export class BidsComponent implements OnInit {
     this.bidsFacade.getBidsByProduct(this.productId).subscribe({
       next: bids => {
         this.bids = bids.sort((a, b) => b.amount - a.amount);
+        if (this.bids.length > 0) {
+          this.maxPrice = Math.max(this.productPrice, this.bids[0].amount);
+        }
         this.loading = false;
       },
       error: () => (this.loading = false),
@@ -42,9 +54,13 @@ export class BidsComponent implements OnInit {
   }
 
   placeBid(): void {
-    if (!this.newBidAmount) return;
+    if (!this.isActiveUser) return;
 
-    const user = this.authStore.getUser();
+    if (this.newBidAmount == null || this.newBidAmount <= this.maxPrice) {
+      return;
+    }
+
+    const user = this.authFacade.getUser();
     if (!user) return;
 
     const payload: CreateBidPayload = {

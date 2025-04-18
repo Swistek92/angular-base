@@ -1,0 +1,43 @@
+<app-popup-wrapper [(visible)]="visible" [title]="'Logowanie'" (close)="hide()">
+  <form [formGroup]="form" (ngSubmit)="login()">
+    <span class="p-text-secondary block mb-4">Zaloguj się do swojego konta</span>
+
+    <div class="flex items-center gap-4 mb-3">
+      <label for="email" class="font-semibold w-24">Email</label>
+      <div class="flex-1">
+        <input
+          pInputText
+          formControlName="email"
+          id="email"
+          class="w-full"
+          [ngClass]="{ 'ng-invalid': submitted && f['email'].invalid }"
+        />
+        <div *ngIf="submitted && f['email'].invalid" class="text-red-500 text-sm mt-1">
+          Podaj poprawny adres email
+        </div>
+      </div>
+    </div>
+
+    <div class="flex items-center gap-4 mb-5">
+      <label for="password" class="font-semibold w-24">Hasło</label>
+      <div class="flex-1">
+        <input
+          pInputText
+          type="password"
+          formControlName="password"
+          id="password"
+          class="w-full"
+          [ngClass]="{ 'ng-invalid': submitted && f['password'].invalid }"
+        />
+        <div *ngIf="submitted && f['password'].invalid" class="text-red-500 text-sm mt-1">
+          Hasło jest wymagane
+        </div>
+      </div>
+    </div>
+
+    <div class="flex justify-end gap-2">
+      <button pButton label="Anuluj" severity="secondary" type="button" (click)="hide()"></button>
+      <button pButton label="Zaloguj" type="submit"></button>
+    </div>
+  </form>
+</app-popup-wrapper>

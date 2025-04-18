@@ -35,9 +35,9 @@ export class UserService {
       where: { id },
       select: [
         'id',
-        'firstName',
-        'lastName',
-        'avatarUrl',
+        // 'firstName',
+        'name',
+        'avatar',
         'hashedRefreshToken',
         'role',
       ],

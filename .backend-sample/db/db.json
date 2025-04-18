@@ -23,7 +23,7 @@
         "image": "assets/images/products/image3.jpg",
         "price": "85.0",
         "rating": 3,
-        "ownerId": 1,
+        "ownerId": 2,
         "ownerEmail": "admin@example.com",
         "avatar": "assets/images/avatars/admin.jpg",
         "description": "Stylowa bluza z kapturem na chłodne wieczory.",

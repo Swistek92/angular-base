@@ -39,7 +39,7 @@ export class UserController {
     return this.userService.update(+id, updateUserDto);
   }
   // @SetMetadata('role', [Role.ADMIN])
-  @Roles(Role.EDITOR)
+  @Roles(Role.MODERATOR)
   // @UseGuards(RolesGuard)
   // @UseGuards(JwtAuthGuard)
   @Delete(':id')

@@ -1,0 +1,16 @@
+.home-wrapper {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+.product-section {
+  flex: 1;
+}
+
+.paginator {
+  margin-top: 15px;
+}
+.addbutton {
+  width: 50vw;
+  margin: 1rem auto;
+}

@@ -1,0 +1,12 @@
+// These styles are meant to override the PrimeNG theme styles
+.p-rating-cancel-item {
+  display: none;
+}
+//
+input.ng-invalid {
+  // border: 1px solid red;
+}
+input.ng-invalid.ng-touched,
+input.ng-invalid.ng-dirty {
+  border: 1px solid red;
+}

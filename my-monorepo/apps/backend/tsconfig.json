@@ -1,0 +1,23 @@
+{
+  "extends": "../../tsconfig.base.json",
+  "compilerOptions": {
+    "module": "CommonJS",
+    "target": "es2021",
+    "esModuleInterop": true,
+    "baseUrl": "./",
+    "paths": {
+      "src/*": ["./*"]
+    }
+  },
+  "files": [],
+  "include": ["**/*.ts"],
+  "exclude": ["**/*.spec.ts"],
+  "references": [
+    {
+      "path": "./tsconfig.app.json"
+    },
+    {
+      "path": "./tsconfig.spec.json"
+    }
+  ]
+}

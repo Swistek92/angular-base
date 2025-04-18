@@ -2,36 +2,28 @@ import {
   BeforeInsert,
   Column,
   CreateDateColumn,
+  DeleteDateColumn,
   Entity,
   JoinTable,
   ManyToMany,
   OneToMany,
   PrimaryGeneratedColumn,
+  UpdateDateColumn,
 } from 'typeorm';
 import { Property } from './property.entity';
-
 import * as bcrypt from 'bcrypt';
-import { Role } from 'src/auth/enums/role.enum';
+import { Role } from '../auth/enums/role.enum';
 
 @Entity()
 export class User {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @Column()
-  firstName: string;
-
-  @Column()
-  lastName: string;
+  @Column({ nullable: true })
+  name: string; // zamiast firstName i lastName
 
   @Column()
   email: string;
-
-  @Column({ nullable: true })
-  avatarUrl: string;
-
-  @CreateDateColumn()
-  createdAt: Date;
 
   @Column()
   password: string;
@@ -42,6 +34,27 @@ export class User {
     default: Role.USER,
   })
   role: Role;
+
+  @Column({ default: true })
+  isActive: boolean;
+
+  @Column({ default: false })
+  verified: boolean;
+
+  @Column({ nullable: true })
+  avatar: string;
+
+  @CreateDateColumn()
+  createdAt: Date;
+
+  @UpdateDateColumn()
+  updatedAt: Date;
+
+  @DeleteDateColumn()
+  deletedAt: Date;
+
+  @Column({ nullable: true })
+  lastLogin: Date;
 
   @Column({ nullable: true })
   hashedRefreshToken: string;

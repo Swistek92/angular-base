@@ -1,0 +1,35 @@
+<p-dialog header="header" [(visible)]="display" [modal]="false" [closable]="false">
+  <!-- name -->
+  <div class="column gap-1" [formGroup]="productForm">
+    <div class="row gap-05">
+      <span class="price-label">Name:</span>
+      <input type="text" formControlName="name" />
+      <!-- <input type="text" [(ngModel)]="selectedProduct.name" /> -->
+    </div>
+
+    <!-- price -->
+    <div class="row gap-05">
+      <span class="price-label">Price:</span>
+      <input type="text" formControlName="price" />
+      <!-- <input type="text" [(ngModel)]="selectedProduct.price" /> -->
+    </div>
+
+    <!-- img -->
+    <div class="row gap-05">
+      <span class="price-label">Image:</span>
+      <input type="text" formControlName="image" />
+    </div>
+
+    <p-rating formControlName="rating" [readonly]="false" iconCancelClass="hidden" />
+  </div>
+
+  <ng-template #footer>
+    <p-button
+      label="Save"
+      severity="secondary"
+      (click)="onConfirm()"
+      [class.disabled]="productForm.valid"
+    />
+    <p-button label="Cancel" severity="secondary" (click)="onCancel()" />
+  </ng-template>
+</p-dialog>

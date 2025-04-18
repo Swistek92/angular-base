@@ -1,0 +1,48 @@
+<div *ngIf="loading">Loading bids...</div>
+
+<div *ngIf="!loading && bids.length > 0">
+  <h1>Max price: {{ maxPrice }} zł</h1>
+
+  <h3>Latest Bids:</h3>
+  <ul class="bids-list">
+    <li *ngFor="let bid of bids">
+      <img [src]="bid.avatar" alt="avatar" width="30" height="30" />
+      <strong>{{ bid.userName }}</strong> — 💰 {{ bid.amount }} zł
+      <small>({{ bid.createdAt | date: 'short' }})</small>
+      <button
+        *ngIf="currentUser?.id === bid.userId"
+        pButton
+        icon="pi pi-trash"
+        (click)="deleteBid(bid.id)"
+        class="p-button-sm p-button-danger"
+      ></button>
+    </li>
+  </ul>
+</div>
+<h4 *ngIf="isActiveUser">Place a Bid</h4>
+<div *ngIf="isActiveUser" class="row gap-1">
+  <p-inputNumber
+    [(ngModel)]="newBidAmount"
+    mode="decimal"
+    [min]="1"
+    placeholder="Enter your bid"
+  ></p-inputNumber>
+
+  <button
+    pButton
+    label="Bid"
+    icon="pi pi-check"
+    (click)="placeBid()"
+    [disabled]="!newBidAmount || newBidAmount <= maxPrice"
+  ></button>
+</div>
+
+<!-- 🚫 Info: Bid too low -->
+<div *ngIf="isActiveUser && newBidAmount && newBidAmount <= maxPrice" class="text-danger">
+  ❗ Twoja oferta musi być wyższa niż {{ maxPrice }} zł.
+</div>
+
+<!-- 🔒 Nieaktywny użytkownik -->
+<div *ngIf="!isActiveUser" class="text-danger mt-2">
+  🔒 Musisz być aktywnym użytkownikiem, aby złożyć ofertę.
+</div>

@@ -1,0 +1,8 @@
+<svg width="200" height="60" xmlns="http://www.w3.org/2000/svg">
+  <rect width="200" height="60" fill="#ffffff"/>
+  <text x="10" y="40" font-family="Verdana, sans-serif" font-size="28" font-weight="bold" fill="#333">
+    <tspan fill="#000">Zebra</tspan><tspan fill="#e91e63">Mart</tspan>
+  </text>
+  <circle cx="170" cy="30" r="12" fill="#000"/>
+  <path d="M 160 20 Q 165 15, 170 20 Q 175 25, 180 20" stroke="#000" stroke-width="2" fill="none"/>
+</svg>
